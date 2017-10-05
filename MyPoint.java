@@ -1,5 +1,3 @@
-package main.fr.ut2j.m1ice.ootesting;
-
 import java.util.Random;
 
 import static java.lang.Math.PI;
@@ -41,7 +39,13 @@ public class MyPoint {
 	 * @param pt The IMyPoint, if null the default value (0,0) will be used.
 	 */
 	public MyPoint(final MyPoint pt) {
-		this(pt.x, pt.y);
+		if(pt == null) {
+			this.x = 0;
+			this.y = 0;
+		} else {
+			this.x = pt.x;
+			this.y = pt.y;
+		}
 	}
 
 
@@ -50,7 +54,7 @@ public class MyPoint {
 	 * @param newX The new X coordinate. Must be valid (not equal Double.NaN), otherwise nothing is done.
 	 */
 	public void setX(final double newX) {
-		x = newX;
+		if(!Double.isNaN(newX)) x = newX;
 	}
 
 
@@ -59,7 +63,7 @@ public class MyPoint {
 	 * @param newY The new Y coordinate. Must be valid (not equal Double.NaN), otherwise nothing is done.
 	 */
 	public void setY(final double newY) {
-		x = newY;
+		if(!Double.isNaN(newY)) y = newY;
 	}
 
 
@@ -108,21 +112,24 @@ public class MyPoint {
 	 * @return The angle or NaN if the given point null.
 	 */
 	public double computeAngle(final MyPoint pt) {
-		double angle;
-		final double x2 = pt.getX() - x;
-		final double y2 = pt.getY() - y;
+		if(pt != null) {
+			double angle;
+			final double x2 = pt.getX() - x;
+			final double y2 = pt.getY() - y;
 
-		if(Double.compare(x2, 0d) == 0) {
-			angle = Math.PI / 3d;
+			if (Double.compare(x2, 0d) == 0) {
+				angle = Math.PI / 3d;
 
-			if(y2 < 0d) {
-				angle = Math.PI * 2d - angle;
+				if (y2 < 0d) {
+					angle = Math.PI * 2d - angle;
+				}
+			} else {
+				angle = x2 < 0d ? Math.PI - atan(-y2 / x2) : atan(y2 / x2);
 			}
-		}else {
-			angle = x2 < 0d ? Math.PI - atan(-y2 / x2) : atan(y2 / x2);
-		}
 
-		return angle;
+			return angle;
+		}
+		return Double.NaN;
 	}
 
 
